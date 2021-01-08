@@ -8,6 +8,7 @@ let geocoder;
 let infoWindow;
 let OldInfoWindow;
 let caseListJSON = [];
+let markerList = [];
 
 
 btnClickHandlers();
@@ -19,11 +20,9 @@ function initCaseList() {
     $.post('/Home/GetCases', (data) => {
 
         //Konverterar JSON strängen som returneras från Controllern till ett JSON objekt
-        console.log("UTAN PARSE: " + data);
+
 
         caseListJSON = JSON.parse(data);
-        console.log("PARSAD: " + caseListJSON);
-
         console.log(caseListJSON);
 
 
@@ -46,22 +45,27 @@ function initMap() {
         east: 10.666021262515228,
     }
 
+    let minZoom = 8.9;
+
     //Skapar kartan och väljer inställningar för start plats samt UI
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 58.715838703141316, lng: 11.333030735396424 },
-        zoom: 10,
+        zoom: minZoom,
         zoomControl: true,
         mapTypeControl: false,
         scaleControl: false,
         streetViewControl: false,
         rotateControl: false,
         fullscreenControl: false,
-        restriction: {
-            latLngBounds: tanumsKommun,
-            strictBounds: true
-        }
+        //restriction: {
+        //    latLngBounds: tanumsKommun,
+        //    strictBounds: true
+        //}
     });
 
+    google.maps.event.addListener(map, 'zoom_changed', function () {
+        if (map.getZoom() < minZoom) map.setZoom(minZoom);
+    });
 
     //Geocoder som översätter 
     geocoder = new google.maps.Geocoder();
@@ -130,6 +134,8 @@ function initMap() {
             collisionBehavior: "google.maps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY",
         });
 
+        markerList.push(marker);
+
         //Html för informationsrutorna
         const contentString =
             '<div id="content">' +
@@ -137,7 +143,7 @@ function initMap() {
             "</div>" +
             "<p style='font-weight:bold; text-align:center'>Ärende information</p>" +
             "<p> Ärendenummer: " + object.id + " </p>" +
-            "<p> Kategori: " + object.category + " </p>" +
+            "<p> Kategori: " + categoryStringFix(object.category) + " </p>" +
             "<p> Beskrivning: " + object.description + " </p>" +
             "<p> Status: " + object.status + " </p>" +
             "</div>" +
@@ -145,7 +151,7 @@ function initMap() {
 
         const infowindow = new google.maps.InfoWindow({
             content: contentString,
-            maxWidth: 150,
+            maxWidth: 250,
         });
 
         //Lägger till en click listener som visar informationsruta för varje markör
@@ -153,8 +159,12 @@ function initMap() {
             infowindow.open(map, marker);
         });
     })
-}
 
+    new MarkerClusterer(map, markerList, {
+        imagePath:
+            "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+    });
+}
 
 
 
@@ -180,7 +190,9 @@ function btnClickHandlers() {
 
         //Hämtar dagens datum
         let date = new Date;
-        let dateString = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay();
+        let month = date.getMonth() + 1;
+        let dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
+        console.log(dateString);
 
         //console.log('Categori id: ' + categoryFixer($('#select-category').val()))
 
@@ -193,6 +205,7 @@ function btnClickHandlers() {
             description: $('#desc-input').val(),
             contact_phone: $('#phone-input').val(),
             contact_email: $('#email-input').val(),
+            category: categoryIdFix($("#select-category").val()),
             isActive: true
         }
 
@@ -244,8 +257,97 @@ function btnClickHandlers() {
 
 
 
+//Switch cases, gör om kategori-id till sträng och tvärtom
+function categoryStringFix(categoryId) {
 
+    let categoryString;
+    switch (categoryId) {
+        case 1:
+            categoryString = "Gatubelysning";
+            break;
+        case 2:
+            categoryString = "Parker";
+            break;
+        case 3:
+            categoryString = "Gator och Vägar";
+            break;
+        case 4:
+            categoryString = "Trafiksignaler";
+            break;
+        case 5:
+            categoryString = "Papperskorgar";
+            break;
+        case 6:
+            categoryString = "Skyltar";
+            break;
+        case 7:
+            categoryString = "Parkering";
+            break;
+        case 8:
+            categoryString = "Offentliga Toaletter";
+            break;
+        case 9:
+            categoryString = "Brunnar";
+            break;
+        case 10:
+            categoryString = "Cykelbanor, Gångbanor och Trottoarer";
+            break;
+        case 11:
+            categoryString = "Övrigt";
+            break;
+        default:
+            categoryString = "Övrigt";
+            break;
 
+    }
+
+    return categoryString;
+}
+
+function categoryIdFix(categoryString) {
+
+    let categoryId;
+    switch (categoryString) {
+        case "Gatubelysning":
+            categoryId = 1;
+            break;
+        case "Parker":
+            categoryId = 2;
+            break;
+        case "Gator och Vägar":
+            categoryId = 3;
+            break;
+        case "Trafiksignaler":
+            categoryId = 4;
+            break;
+        case "Papperskorgar":
+            categoryId = 5;
+            break;
+        case "Skyltar":
+            categoryId = 6;
+            break;
+        case "Parkering":
+            categoryId = 7;
+            break;
+        case "Offentliga Toaletter":
+            categoryId = 8;
+            break;
+        case "Brunnar":
+            categoryId = 9;
+            break;
+        case "Cykelbanor, Gångbanor och Trottoarer":
+            categoryId = 10;
+            break;
+        case "Övrigt":
+            categoryId = 11;
+            break;
+        default:
+            categoryId = 11;
+            break;
+    }
+
+    return categoryId;
+}
 
 
 

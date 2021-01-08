@@ -15,8 +15,10 @@ function initCaseList() {
 
         //Konverterar JSON strängen som returneras till ett JSON objekt
         caseListJSON = JSON.parse(data);
-
-        console.log(caseListJSON);
+        caseListJSON.forEach(function (item) {
+            item.category = categoryStringFix(item.category);
+        })
+        
 
         //Konfigurerar och initierar tabellen
         $("#jsGrid").jsGrid({
@@ -55,6 +57,7 @@ function initCaseList() {
 
                 $.post("/Home/DeleteCase", {id: data.item.id }, function (data, status) {
                     console.log("DeleteCase request status: " + status);
+                    location.reload();
                 })
             },
 
@@ -284,6 +287,105 @@ function initMap() {
             infowindow.open(map, marker);
         });
     })
+
+    new MarkerClusterer(map, markerList, {
+        imagePath:
+            "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+    });
 }
+
+
+//Switch cases, gör om kategori-id till sträng och tvärtom
+function categoryStringFix(categoryId) {
+
+    let categoryString;
+    switch (categoryId) {
+        case 1:
+            categoryString = "Gatubelysning";
+            break;
+        case 2:
+            categoryString = "Parker";
+            break;
+        case 3:
+            categoryString = "Gator och Vägar";
+            break;
+        case 4:
+            categoryString = "Trafiksignaler";
+            break;
+        case 5:
+            categoryString = "Papperskorgar";
+            break;
+        case 6:
+            categoryString = "Skyltar";
+            break;
+        case 7:
+            categoryString = "Parkering";
+            break;
+        case 8:
+            categoryString = "Offentliga Toaletter";
+            break;
+        case 9:
+            categoryString = "Brunnar";
+            break;
+        case 10:
+            categoryString = "Cykelbanor, Gångbanor och Trottoarer";
+            break;
+        case 11:
+            categoryString = "Övrigt";
+            break;
+        default:
+            categoryString = "Övrigt";
+            break;
+
+    }
+
+    return categoryString;
+}
+
+function categoryIdFix(categoryString) {
+
+    let categoryId;
+    switch (categoryString) {
+        case "Gatubelysning":
+            categoryId = 1;
+            break;
+        case "Parker":
+            categoryId = 2;
+            break;
+        case "Gator och Vägar":
+            categoryId = 3;
+            break;
+        case "Trafiksignaler":
+            categoryId = 4;
+            break;
+        case "Papperskorgar":
+            categoryId = 5;
+            break;
+        case "Skyltar":
+            categoryId = 6;
+            break;
+        case "Parkering":
+            categoryId = 7;
+            break;
+        case "Offentliga Toaletter":
+            categoryId = 8;
+            break;
+        case "Brunnar":
+            categoryId = 9;
+            break;
+        case "Cykelbanor, Gångbanor och Trottoarer":
+            categoryId = 10;
+            break;
+        case "Övrigt":
+            categoryId = 11;
+            break;
+        default:
+            categoryId = 11;
+            break;
+    }
+
+    return categoryId;
+}
+
 
 

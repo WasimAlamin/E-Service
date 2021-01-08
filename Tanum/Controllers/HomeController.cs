@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text.Json;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Tanum.Models;
 
 namespace Tanum.Controllers
 {
+    
     public class HomeController : Controller
     {
+        string errorMessage = "";
         // GET: Home
         public ActionResult Index()
         {
             return View();
         }
-        
-        
+
+        [Authorize]
         public ActionResult Admin()
         {
             return View();
@@ -28,9 +27,15 @@ namespace Tanum.Controllers
         public ActionResult LogIn()
         {
             UserModel user = new UserModel();
-            
+
+            ViewBag.ErrorMessage = errorMessage;
             return View(user);
         }
+
+        //public ActionResult getCategories()
+        //{
+        //    ProjektService.
+        //}
 
         [HttpPost]
         //Tar emot ett ärende (från formuläret) och skickar till WebService
@@ -38,10 +43,7 @@ namespace Tanum.Controllers
         {
             ProjektService.Service1Client client = new ProjektService.Service1Client();
 
-            //Tillfälligt tills jag fixar switch case i uträkningen
-            iCase.category = 1;
-
-
+            
             client.addCase(iCase);
             return RedirectToAction("Index");
         }
@@ -72,16 +74,23 @@ namespace Tanum.Controllers
             return Json(JsonSerializer.Serialize(caseList));
         }
 
-        public ActionResult LogIn(string username, string password)
+        [HttpPost]
+        public ActionResult LogIn(UserModel u)
         {
             ProjektService.Service1Client client = new ProjektService.Service1Client();
-            
-            if(client.logIn(username, password) == true)
+
+            bool x = client.logIn(u.username, u.password);
+
+            if(client.logIn(u.username, u.password) == true)
             {
-                System.Web.Security.FormsAuthentication.RedirectFromLoginPage(username, true);
+                System.Web.Security.FormsAuthentication.RedirectFromLoginPage(u.username, false);
+                return RedirectToAction("Admin", "Home");
             }
 
-            return RedirectToAction("LogIn");
+            errorMessage = "Error";
+            ViewBag.ErrorMessage = errorMessage;
+            //ModelState.AddModelError("", "Fel användarnamn eller lösenord");
+            return LogIn();
         }
     }
 }

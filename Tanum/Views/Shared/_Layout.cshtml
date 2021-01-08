@@ -10,13 +10,7 @@
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
-    <style>
-
-        
-
-
-
-    </style>
+    
 </head>
 
 
@@ -27,7 +21,7 @@
                 <div class="justify-content-end">
                     <ul>
                         <li><a href="#">Kontakt oss |</a></li>
-                        <li>@Html.ActionLink("TanumPortal |", "LogIn", "Home")</li>
+                        <li>@Html.ActionLink("TanumPortal |", "Admin", "Home")</li>
                         <li><a href="#">Kartportal</a></li>
                     </ul>
                 </div>
@@ -45,13 +39,16 @@
         <p>&copy; @DateTime.Now.Year - Tanums Kommun | Admin</p>
     </footer>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-marker-clusterer/1.0.0/markerclusterer.js" integrity="sha512-qk0kjj1Y3oBy4ohnPJwo/C3CYbYxBnlu0vWxvpMQkmt25s0eEsjmRSxsiyhVfxbJA26/u0LAdbNbtxq6vFF/8A==" crossorigin="anonymous"></script>
     <script defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJXWucFbLokvY0d5SUvV4eDJuaW9vPMqw&callback=initCaseList">
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
     <script type="text/javascript" src="~/Content/Index.js"></script>
-    
+
+
 
 
 </body>
