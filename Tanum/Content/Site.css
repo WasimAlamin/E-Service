@@ -1,0 +1,65 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    margin-left: 10vw;
+    margin-right: 10vw;
+
+}
+
+
+.top-bar {
+    width: 100%;
+}
+
+    .top-bar ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        padding-top: 0px;
+        overflow: hidden;
+        background-color: white;
+        float: right;
+    }
+
+    .top-bar li {
+        display: inline-block;
+    }
+
+        .top-bar li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 0px 0px;
+            text-decoration: none;
+        }
+
+.logo {
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 210px;
+}
+
+#map {
+    height: 70%;
+    width: 100%;
+}
+
+.circle-svg {
+    height: 13px;
+    width: 13px;
+}
+
+/* Set padding to keep content from hitting the edges */
+
+header {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+

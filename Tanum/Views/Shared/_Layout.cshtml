@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <style>
+
+        
+
+
+
+    </style>
+</head>
+
+
+<body class="px-4">
+    <header>
+        <div class="top-bar">
+            <div class="container-fluid">
+                <div class="justify-content-end">
+                    <ul>
+                        <li><a href="#">Kontakt oss |</a></li>
+                        <li>@Html.ActionLink("TanumPortal |", "LogIn", "Home")</li>
+                        <li><a href="#">Kartportal</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a href="/Home/Index"> <img class="logo" src="~/Content/Tanum_farg_liggande.gif" alt="Tanums logo"> </a>
+        </div>
+
+    </header>
+    <hr />
+    @RenderBody()
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Tanums Kommun | Admin</p>
+    </footer>
+
+    <script defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJXWucFbLokvY0d5SUvV4eDJuaW9vPMqw&callback=initCaseList">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <script type="text/javascript" src="~/Content/Index.js"></script>
+    
+
+
+</body>
+</html>
