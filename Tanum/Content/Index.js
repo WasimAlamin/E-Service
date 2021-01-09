@@ -208,41 +208,55 @@ function btnClickHandlers() {
     //Hämtar data från alla fält och från den aktiva markören och skickar det vidare till Controller
     $('#submit-btn').click((e) => {
 
-        //e.preventDefault();
+        e.preventDefault();
 
-        //Hämtar dagens datum
-        let date = new Date;
-        let month = date.getMonth() + 1;
-        let dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
-        console.log(dateString);
+        let adress = $('#position-input').val();
+        let desc = $('#desc-input').val();
 
-        //console.log('Categori id: ' + categoryFixer($('#select-category').val()))
+        if ((adress == "") || (desc == "")) {
+
+            alert("Var vänlig och fyll i de obligatoriska fälten (*)");
+
+        } else {
+
+            //Hämtar dagens datum
+            let date = new Date;
+            let month = date.getMonth() + 1;
+            let dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
+            console.log(dateString);
+
+            //console.log('Categori id: ' + categoryFixer($('#select-category').val()))
 
 
-        //Hämtar all data som behövs för ett ärende och packar in det i ett JSON objekt.
-        let caseJSON = {
-            date: dateString,
-            lat: newMarker.position.lat,
-            lng: newMarker.position.lng,
-            description: $('#desc-input').val(),
-            contact_phone: $('#phone-input').val(),
-            contact_email: $('#email-input').val(),
-            category: categoryIdFix($("#select-category").val()),
-            isActive: true
+            //Hämtar all data som behövs för ett ärende och packar in det i ett JSON objekt.
+            let caseJSON = {
+                date: dateString,
+                lat: newMarker.position.lat,
+                lng: newMarker.position.lng,
+                description: $('#desc-input').val(),
+                contact_phone: $('#phone-input').val(),
+                contact_email: $('#email-input').val(),
+                category: categoryIdFix($("#select-category").val()),
+                isActive: true
+            }
+
+            //Skickar ett ärende som ett JSON objekt till metoden i Controller som kommunicerar med WebService
+            $.post('/Home/AddCase', caseJSON, (data, status) => {
+                console.log('Submit request status: ' + status)
+
+                console.log(status);
+                if (status == "success") {
+                    alert("Ditt ärende har nu registrerats!")
+                    location.reload();
+                } else {
+                    alert("Ditt ärende kunde tyvär inte registreras. Var vänlig och försök igen!")
+                    location.reload();
+                }
+            });
+
         }
 
-        //Skickar ett ärende som ett JSON objekt till metoden i Controller som kommunicerar med WebService
-        $.post('/Home/AddCase', caseJSON, (data, status) => {
-            console.log('Submit request status: ' + status)
-
-            if (status == "success") {
-                alert("Ditt ärende har nu registrerats!")
-                location.reload();
-            } else {
-                alert("Ditt ärende kunde tyvär inte registreras. Var vänlig och försök igen!")
-                location.reload();
-            }
-        });
+        
 
     })
 
@@ -264,7 +278,7 @@ function btnClickHandlers() {
             //Ny marker skapas lagras som newMarker
             newMarker = new google.maps.Marker({
                 position: queryLocation,
-                icon: "/Content/map-icon-yellow.svg",
+                icon: "/Content/map-pin-blue.svg",
                 map,
                 title: "Nytt ärende",
                 collisionBehavior: "google.maps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY",
