@@ -32,11 +32,6 @@ namespace Tanum.Controllers
             return View(user);
         }
 
-        //public ActionResult getCategories()
-        //{
-        //    ProjektService.
-        //}
-
         [HttpPost]
         //Tar emot ett ärende (från formuläret) och skickar till WebService
         public ActionResult AddCase(ProjektService.CaseData iCase)
@@ -87,9 +82,8 @@ namespace Tanum.Controllers
                 return RedirectToAction("Admin", "Home");
             }
 
-            errorMessage = "Error";
+            errorMessage = "Fel användarnamn eller lösenord";
             ViewBag.ErrorMessage = errorMessage;
-            //ModelState.AddModelError("", "Fel användarnamn eller lösenord");
             return LogIn();
         }
     }

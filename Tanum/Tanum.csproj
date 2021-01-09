@@ -228,6 +228,9 @@
     <Content Include="Content\map-icon-blue.svg" />
     <Content Include="Content\map-icon-green.svg" />
     <Content Include="Content\map-icon-yellow.svg" />
+    <Content Include="Content\map-pin-green.svg" />
+    <Content Include="Content\map-pin-yellow.svg" />
+    <Content Include="Content\map-pin-blue.svg" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\Tanum_farg_liggande.gif" />
     <Content Include="Global.asax" />

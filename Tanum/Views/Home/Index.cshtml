@@ -9,6 +9,7 @@
         <form>
             <div class="mb-3 ">
                 <label for="select-category">Välj kategori: </label>
+                <br />
                 <select id="select-category" class="custom-select">
                     <option>Gatubelysning</option>
                     <option>Parker</option>
@@ -23,17 +24,18 @@
                 </select>
             </div>
             <div class="my-3">
-                <label for="position-input">Adress</label>
+                <label for="position-input">Adress*</label>
+                <br />
                 <div class="input-group">
-                    <input id="position-input" class="form-control" type="text" />
+                    <input id="position-input" class="form-control" type="text" required />
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary" id="position-btn">Välj</button>
                     </div>
                 </div>
             </div>
             <div class="my-3 w-100">
-                <label for="desc-input">Beskrivning</label>
-                <textarea id="desc-input" class="form-control w-100" type="text"> </textarea>
+                <label for="desc-input">Beskrivning*</label>
+                <textarea id="desc-input" class="form-control w-100" type="text" required> </textarea>
             </div>
             <div class="my-3">
                 <label for="img-input">Bild</label>
@@ -46,7 +48,7 @@
             </div>
             <div class="my-3 w-100">
                 <label for="phone-input">Telefon</label>
-                <input id="phone-input" class="form-control w-100" type="number" />
+                <input id="phone-input" class="form-control w-100" type="number"/>
             </div>
             <div class="my-3 w-100">
                 <label for="email-input">Epost</label>
@@ -54,6 +56,7 @@
             </div>
             <div class="my-3">
                 <label for="select-follow">Följ ärendet genom: </label>
+                <br />
                 <select id="select-follow" class="custom-select">
                     <option selected>Epost</option>
                     <option>Sms</option>

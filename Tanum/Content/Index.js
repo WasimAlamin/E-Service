@@ -82,7 +82,7 @@ function initMap() {
         //Ny marker skapas lagras som newMarker
         newMarker = new google.maps.Marker({
             position: position,
-            icon: "/Content/map-icon-yellow.svg",
+            icon: "/Content/map-pin-blue.svg",
             map,
             title: "Ärende",
             collisionBehavior: "google.maps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY",
@@ -116,13 +116,23 @@ function initMap() {
 
         let icon;
         //Väljer icon färg
+        //if (object.isActive == false) {
+        //    icon = {
+        //        url: "/Content/map-icon-green.svg"
+        //    }
+        //} else {
+        //    icon = {
+        //        url: "/Content/map-icon-yellow.svg"
+        //    }
+        //}
+
         if (object.isActive == false) {
             icon = {
-                url: "/Content/map-icon-green.svg"
+                url: "/Content/map-pin-green.svg"
             }
         } else {
             icon = {
-                url: "/Content/map-icon-yellow.svg"
+                url: "/Content/map-pin-yellow.svg"
             }
         }
 
@@ -145,7 +155,7 @@ function initMap() {
             "<p> Ärendenummer: " + object.id + " </p>" +
             "<p> Kategori: " + categoryStringFix(object.category) + " </p>" +
             "<p> Beskrivning: " + object.description + " </p>" +
-            "<p> Status: " + object.status + " </p>" +
+            "<p> Status: " + statusFix(object.isActive) + " </p>" +
             "</div>" +
             "</div>";
 
@@ -169,6 +179,18 @@ function initMap() {
 
 
 
+function statusFix(status) {
+
+    let statusString;
+
+    if (status) {
+        statusString = 'Aktiv'
+    } else {
+        statusString = 'Avslutad'
+    }
+
+    return statusString;
+}
 
 
 
@@ -186,7 +208,7 @@ function btnClickHandlers() {
     //Hämtar data från alla fält och från den aktiva markören och skickar det vidare till Controller
     $('#submit-btn').click((e) => {
 
-        e.preventDefault();
+        //e.preventDefault();
 
         //Hämtar dagens datum
         let date = new Date;

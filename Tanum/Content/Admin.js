@@ -8,6 +8,21 @@ let markerList = [];
 let caseListJSON;
 let map;
 
+let categories = [
+    { name: "Gatubelysning", id: 1 },
+    { name: "Parker", id: 2 },
+    { name: "Gator och Vägar", id: 3 },
+    { name: "Trafiksignaler", id: 4 },
+    { name: "Papperskorgar", id: 5 },
+    { name: "Skyltar", id: 6 },
+    { name: "Parkering", id: 7 },
+    { name: "Offentliga Toaletter", id: 8 },
+    { name: "Brunnar", id: 9 },
+    { name: "Cykelbanor, Gångbanor och Trottoarer", id: 10 },
+    { name: "Övrigt", id: 11 }
+    
+]
+
 //Metoden som initierar allting
 function initCaseList() {
 
@@ -17,6 +32,7 @@ function initCaseList() {
         caseListJSON = JSON.parse(data);
         caseListJSON.forEach(function (item) {
             item.category = categoryStringFix(item.category);
+            item.date = item.date.slice(0, 10);
         })
         
 
@@ -42,11 +58,11 @@ function initCaseList() {
 
             fields: [
                 { name: "id", type: "number", width: 30, title: "Nr", align: "center", editing: false, validate: "required" },
-                { name: "date", type: "text", width: 150, title: "Datum", editing: false },
+                { name: "date", type: "text", width: 150, title: "Datum", editing: false , align: 'center'},
                 { name: "description", type: "text", width: 300, title: "Beskrivning" },
                 { name: "contact_phone", type: "text", width: 200, title: "Kontakt-Tel", align: "center", editing: false },
                 { name: "contact_email", type: "text", width: 200, title: "Kontakt-Epost", align: "center", editing: false },
-                { name: "category", type: "text", width: 200, title: "Kategori", align: "center", },
+                { name: "category", type: "select", width: 200, items: categories, title: "Kategori", align: "center", valueField: "name", textField: "name", editing: true },
                 { name: "isActive", type: "checkbox", width: 50, title: "Aktiv", align: "center", },
                 { type: "control" }
             ],
@@ -71,7 +87,7 @@ function initCaseList() {
                 $.post("/Home/EditCase", {
 
                     id: data.item.id,
-                    category: data.item.category,
+                    category: categoryIdFix(data.item.category),
                     description: data.item.description,
                     isActive: data.item.isActive
 
@@ -101,9 +117,9 @@ function initCaseList() {
                 let icon;
 
                 if (data.item.isActive == true) {
-                    icon = "/Content/map-icon-yellow.svg";
+                    icon = "/Content/map-pin-yellow.svg";
                 } else {
-                    icon = "/Content/map-icon-green.svg"
+                    icon = "/Content/map-pin-green.svg"
                 }
 
                 new google.maps.Marker({
@@ -116,48 +132,48 @@ function initCaseList() {
             },
 
 
-
+            
 
             //Callback funktion när användaren klickar på en rad (Vald markör får blå färg)
-            rowClick: function (data) {
+            //rowClick: function (data) {
 
 
-                let selectedMarkerId = data.item.id;
+            //    let selectedMarkerId = data.item.id;
 
-                markerList.forEach(function (item) {
+            //    markerList.forEach(function (item) {
 
-                    if (item.title === ("" + selectedMarkerId)) {
+            //        if (item.title === ("" + selectedMarkerId)) {
 
-                        if (oldActiveMarker != null) {
+            //            if (oldActiveMarker != null) {
 
-                            oldActiveMarker.setMap(null);
+            //                oldActiveMarker.setMap(null);
 
-                            new google.maps.Marker({
-                                position: oldActiveMarker.position,
-                                icon: oldActiveMarkerIcon,
-                                map,
-                                title: item.title,
-                            });
+            //                new google.maps.Marker({
+            //                    position: oldActiveMarker.position,
+            //                    icon: oldActiveMarkerIcon,
+            //                    map,
+            //                    title: item.title,
+            //                });
 
-                        }
-
-
-                        oldActiveMarkerIcon = item.icon;
-                        item.setMap(null);
+            //            }
 
 
-                        oldActiveMarker = new google.maps.Marker({
-                            position: item.position,
-                            icon: "/Content/map-icon-blue.svg",
-                            map,
-                            title: item.title
-                        });
-
-                    }
-                })
+            //            oldActiveMarkerIcon = item.icon;
+            //            item.setMap(null);
 
 
-            }
+            //            oldActiveMarker = new google.maps.Marker({
+            //                position: item.position,
+            //                icon: "/Content/map-icon-blue.svg",
+            //                map,
+            //                title: item.title
+            //            });
+
+            //        }
+            //    })
+
+
+            //}
         });
 
         //Skapar och lägger ut kartan
@@ -177,66 +193,29 @@ function initMap() {
         east: 10.666021262515228,
     }
 
+    let minZoom = 8.9;
+
     //Skapar kartan och väljer inställningar för start plats samt UI
     map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 58.715838703141316, lng: 11.333030735396424 },
-        zoom: 10,
+        zoom: minZoom,
         zoomControl: true,
         mapTypeControl: false,
         scaleControl: false,
         streetViewControl: false,
         rotateControl: false,
         fullscreenControl: false,
-        restriction: {
-            latLngBounds: tanumsKommun,
-            strictBounds: true
-        }
+        //restriction: {
+        //    latLngBounds: tanumsKommun,
+        //    strictBounds: true
+        //}
     });
 
-
-    //Geocoder som översätter 
-    geocoder = new google.maps.Geocoder();
-
-
-    //Skapar click listener på själva kartan
-    map.addListener('click', (e) => {
-
-        let position = e.latLng.toJSON();
-
-        //Den tidigare tillagda markern blir markerad som oldmarker
-        oldMarker = newMarker;
-
-        //Ny marker skapas lagras som newMarker
-        newMarker = new google.maps.Marker({
-            position: position,
-            icon: "/Content/map-icon-yellow.svg",
-            map,
-            title: "Ärende",
-            collisionBehavior: "google.maps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY",
-        });
-
-
-        //Reverse geocoding, synkar placerad markör med adress fältet i formuläret
-        geocoder.geocode({ location: position }, (result, status) => {
-            if (status === 'OK') {
-
-                if (result[0]) {
-                    $('#position-input').val(result[0].formatted_address);
-                }
-            } else {
-                alert('Kunde inte hitta adress!')
-            }
-        });
-
-
-        //Raderar oldMarker om det finns en
-        if (oldMarker != null) {
-
-            oldMarker.setMap(null);
-        }
-
+    google.maps.event.addListener(map, 'zoom_changed', function () {
+        if (map.getZoom() < minZoom) map.setZoom(minZoom);
     });
 
+ 
 
 
     //Skriver ut markörer från listan med JSONobjekt som hämtas från metoden i börjar
@@ -246,11 +225,11 @@ function initMap() {
         //Väljer icon färg
         if (object.isActive == false) {
             icon = {
-                url: "/Content/map-icon-green.svg"
+                url: "/Content/map-pin-green.svg"
             }
         } else {
             icon = {
-                url: "/Content/map-icon-yellow.svg"
+                url: "/Content/map-pin-yellow.svg"
             }
         }
 
@@ -273,7 +252,7 @@ function initMap() {
             "<p> Ärendenummer: " + object.id + " </p>" +
             "<p> Kategori: " + object.category + " </p>" +
             "<p> Beskrivning: " + object.description + " </p>" +
-            "<p> Status: " + object.isActive + " </p>" +
+            "<p> Status: " + statusFix(object.isActive) + " </p>" +
             "</div>" +
             "</div>";
 
@@ -294,6 +273,19 @@ function initMap() {
     });
 }
 
+
+function statusFix(status) {
+
+    let statusString;
+
+    if (status) {
+        statusString = 'Aktiv'
+    } else {
+        statusString = 'Avslutad'
+    }
+
+    return statusString;
+}
 
 //Switch cases, gör om kategori-id till sträng och tvärtom
 function categoryStringFix(categoryId) {
